@@ -15,16 +15,17 @@ composer install
 ```
 
 2. Configurar el archivo .env
-
-* Escribe el usuario y contraseña de tu base de datos
-
+```
+Escribe el usuario y contraseña de tu base de datos
+```
 
 3. Generar la Base de Datos MySql y las tablas
 ```sh
 php bin/console doctrine:database:create
-php bin/console doctrine:schema:update --force
 ``` 
-
+```sh
+php bin/console doctrine:schema:update --force
+```
 4. Ejecutar Proyecto
 ```sh
 php bin/console server:run
