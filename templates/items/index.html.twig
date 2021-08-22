@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('plugins/datatables/datatables.min.css') }}">
+{% endblock %}
+
+{% block title %}
+    Productos
+{% endblock %}
+
+{% block page_name %}
+    Productos
+{% endblock %}
+
+{% block main_content %}
+    <div class="card card-primary container-fluid">
+        {{ form_start(form, { attr: {class: 'submit-p-form'} }) }}
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Seleccionar Imagen</label>
+                    <label id="label_for_img" for="add_item_imageFile_file" class="form-control"
+                           style="overflow: hidden; cursor: pointer"></label>
+                </div>
+                <div class="d-none">
+                    {{ form_row(form.imageFile, { attr: {'autocomplete': 'off', 'onchange':'getFileJs()'} } ) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.serie, { attr: {'autocomplete': 'off'} } ) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.marca, { attr: {'autocomplete': 'off'} } ) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.modelo, { attr: {'autocomplete': 'off'} } ) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.precioC, { attr: {'autocomplete': 'off','onkeyup':'ganancia()'} } ) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.precioV, { attr: {'autocomplete': 'off','onkeyup':'ganancia()'} } ) }}
+                </div>
+                <div class="col-md-3">
+                    <label>Ganancia</label> <label id="auto-ganacias" class="form-control"></label>
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.xcientoganancia, { attr: {'autocomplete': 'off'} } ) }}
+                </div>
+                <div class="col-md-3 m-auto">
+                    {{ form_row(form.submit, {attr:{class: 'btn-primary btn-block submit-p-btn', style: 'margin-top: 32px!important'}}) }}
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+        <!-- /.card-body -->
+    </div>
+    <div class="card card-primary container-fluid">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="dataTable" class="table table-striped" width="100%" cellspacing="0">
+                    <thead>
+                    <tr class="text-center">
+                        <th width="7%">Imagen</th>
+                        <th width="10%">Tipo</th>
+                        <th width="10%">Marca</th>
+                        <th width="10%">Modelo</th>
+                        <th width="7%">Precio_C</th>
+                        <th width="7%">Precio_V</th>
+                        <th width="7%">Ganancia</th>
+                        <th width="7%">%_Venta</th>
+                        <th width="7%">Total</th>
+                        <th width="7%">Importe</th>
+                        <th width="21%">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in data %}
+                        <tr class="text-center">
+                            <td><img width="30" height="30" style="border-radius: 50%"
+                                     src="dist/img/system/{{ item.imageName }}" alt=""></td>
+                            <td class="text-left pl-4">{{ item.serie }}</td>
+                            <td>{{ item.marca }}</td>
+                            <td>{{ item.modelo }}</td>
+                            <td>{{ item.precioC }}</td>
+                            <td>{{ item.precioV }}</td>
+                            <td>{{ item.ganancia }}</td>
+                            <td>{{ item.xcientoganancia }}</td>
+                            <td>{{ item.cantidad_taller + item.cantidad_inventario }}</td>
+                            <td>{{ (item.cantidad_taller + item.cantidad_inventario) * item.precioC }}</td>
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-default mr-1 ml-1 mb-1"
+                                   href="{{ path('app_item_transf', {'id': item.id}) }}" title="Añadir">
+                                    <i class="fas fa-plus text-primary"></i> </a>
+                                <a class="btn btn-sm btn-default mr-1 ml-1 mb-1"
+                                   href="{{ path('app_items_edit', {'id': item.id}) }}" title="Editar">
+                                    <i class="far fa-edit text-warning"></i> </a>
+                                <button type="button" class="btn btn-sm btn-default mr-1 ml-1 mb-1" title="Eliminar"
+                                        onclick="delItem('{{ item.id }}', '{{ item.marca }}', '{{ item.modelo }}')">
+                                    <i class=" fas fa-trash-alt text-red"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('dist/js/actions.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('plugins/users.js') }}"></script>
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('dist/js/alerts.js') }}"></script>
+    {% for msg in app.flashes('success') %}
+        <script>
+          showAlert('success', '{{ msg }}', 'Correcto')
+        </script>
+    {% endfor %}
+{% endblock %}

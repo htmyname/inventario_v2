@@ -1,0 +1,217 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('plugins/datatables/datatables.min.css') }}">
+    <script>
+      /*if (document.cookie != '') {
+        la_cookie = document.cookie.split('; ')
+        fecha_fin = new Date
+        fecha_fin.setDate(fecha_fin.getDate() - 1)
+        for (i = 0; i < la_cookie.length; i++) {
+          mi_cookie = la_cookie[i].split('=')[0]
+          document.cookie = mi_cookie + '=;expires=' + fecha_fin.toGMTString()
+        }
+      }
+      /*function disableBtn(){
+          let btn = document.getElementById('factura_submit');
+          btn.disabled = true;
+      }*/
+    </script>
+{% endblock %}
+
+{% block title %}
+    Nueva Factura
+{% endblock %}
+
+{% block page_name %}
+    Nueva Factura
+{% endblock %}
+
+{% block page_btns %}
+    <a type="button" class="btn btn-primary m-1 float-right col-md-3" href="{{ path('app_factura') }}"> Nueva Factura </a>
+    <a type="button" class="btn btn-primary m-1 float-right col-md-3" href="{{ path('app_user_factura_xcobrar') }}"> Por Cobrar </a>
+    <a type="button" class="btn btn-primary m-1 float-right col-md-3" href="{{ path('app_user_factura') }}"> Mis Facturas </a>
+{% endblock %}
+
+{% block main_content %}
+    <div class="card card-primary container-fluid">
+        {{ form_start(form, { attr: {class: 'submit-p-form'} }) }}
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6 mb-3 pr-lg-5 pl-lg-5">
+                    <label class="d-block">Cliente</label>
+                    <div class="input-group">
+                        <input id="id_cliente_input" class="form-control bg-white" required="" autocomplete="off"
+                               name="cliente_name" readonly>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#modal-cliente"><i
+                                        class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {{ form_row(form.id_cliente, { attr: {'readonly': 'readonly', 'class': 'd-none'}, label:'', label_attr:{'class':'d-none'} } ) }}
+                </div>
+                <div class="col-lg-6 mb-3 pr-lg-5 pl-lg-5">
+                    <label>Teléfono</label>
+                    <input type="tel" class="form-control" id="cliente_telefono" name="telefono_name" maxlength="8" minlength="8" autocomplete="off" required>
+                </div>
+                <div class="col-lg-6 mt-3 mt-lg-0 pr-lg-5 pl-lg-5">
+                    <div class="input-group">
+                        <label class="form-control">Productos</label>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#modal-producto"><i
+                                        class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <ul id="product-list" class="list-group mt-2 mb-3">
+
+                    </ul>
+                </div>
+                <div class="col-lg-6 mt-3 mt-lg-0 pr-lg-5 pl-lg-5">
+                    <div class="input-group">
+                        <label class="form-control">Servicios</label>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#modal-service"><i
+                                        class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <ul id="service-list" class="list-group mt-2 mb-3">
+
+                    </ul>
+                </div>
+                <div class="col-md-3 m-auto pt-md-3 pt-lg-5">
+                    {{ form_row(form.submit, {attr:{class: 'btn-primary btn-block submit-p-btn', style: 'margin-top: 32px!important'}}) }}
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+        <!-- /.card-body -->
+    </div>
+    <div class="modal fade" id="modal-cliente" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Buscar Cliente</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label>Buscar</label>
+                    <input type="text" id="client_datalist_input" class="form-control" autocomplete="off"
+                           onkeyup="getClient(event)" value=""> <br> <label>Selecciona un resultado</label>
+                    <select id="client_datalist" class="form-control">
+                        <option value='null'>Sin resultados</option>
+                    </select>
+                    <button type="button" class="btn btn-primary float-right mt-3" data-dismiss="modal"
+                            onclick="aceptarClient()">Aceptar
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade" id="modal-producto" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Buscar Productos</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="dataTable" class="table table-striped" width="100%" cellspacing="0">
+                                <thead>
+                                <tr class="text-center">
+                                    <th width="14%">Marca</th>
+                                    <th width="14%">Modelo</th>
+                                    <th width="14%">Serie</th>
+                                    <th width="14%">Precio_Venta</th>
+                                    <th width="14%">Cantidad</th>
+                                    <th width="30%">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in data %}
+                                    <tr class="text-center" id="{{ item.id }}_product">
+                                        <td>{{ item.marca }}</td>
+                                        <td>{{ item.modelo }}</td>
+                                        <td>{{ item.serie }}</td>
+                                        <td>{{ item.precioV }}</td>
+                                        <td>{{ item.cantidad_taller }}</td>
+                                        <td class="text-center">
+                                            <input id="{{ item.id }}_cant" type="number" min="1" max="{{ item.cantidad_taller }}" value="1" style="max-width: 50px; outline: none">
+                                            <input class="btn btn-sm btn-default mr-1 ml-1 mb-1" type="button" value="+" style="width: 40px" onclick="getProduct({{ item.id }})">
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade" id="modal-service" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Buscar Productos</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="dataTable2" class="table table-striped" width="100%" cellspacing="0">
+                                <thead>
+                                <tr class="text-center">
+                                    <th width="33%">Nombre</th>
+                                    <th width="33%">Precio</th>
+                                    <th width="33%">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in service %}
+                                    <tr class="text-center" id="{{ item.id }}_service">
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.precio }}</td>
+                                        <td class="text-center">
+                                            <input id="{{ item.id }}_cantser" type="number" min="1" value="1" style="max-width: 50px; outline: none">
+                                            <input class="btn btn-sm btn-default mr-1 ml-1 mb-1" type="button" value="+" style="width: 40px" onclick="getService({{ item.id }})">
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('dist/js/actions.js') }}"></script>
+    <script src="{{ asset('dist/js/facturas.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('plugins/users.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Perfil
+{% endblock %}
+
+{% block page_name %}
+    Perfil
+{% endblock %}
+
+{% block main_content %}
+    <div class="card card-primary container-fluid">
+        {{ form_start(form, { attr: {class: 'submit-p-form'} }) }}
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    {{ form_row(form.name, { attr: {'autocomplete': 'off'} } ) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.username, { attr: {'autocomplete': 'off'} } ) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.password, { attr: {'autocomplete': 'off'} } ) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.submit, {attr:{text: 'Actualizar', class: 'btn-primary btn-block submit-p-btn', style: 'margin-top: 32px!important'}}) }}
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+        <!-- /.card-body -->
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('dist/js/alerts.js') }}"></script>
+    {% for msg in app.flashes('success') %}
+        <script>
+            showAlert('success', '{{ msg }}', 'Correcto');
+        </script>
+    {% endfor %}
+{% endblock %}

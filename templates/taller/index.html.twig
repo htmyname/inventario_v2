@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('plugins/datatables/datatables.min.css') }}">
+{% endblock %}
+
+{% block title %}
+    Taller
+{% endblock %}
+
+{% block page_name %}
+    Taller
+{% endblock %}
+
+{% block page_btns %}
+    <a type="button" class="btn btn-primary m-1 float-right col-md-3" href="{{ path('app_factura') }}">
+        Nueva Factura
+    </a>
+    <a type="button" class="btn btn-primary m-1 float-right col-md-3" href="{{ path('app_user_factura_xcobrar') }}">
+        Por Cobrar
+    </a>
+    <a type="button" class="btn btn-primary m-1 float-right col-md-3" href="{{ path('app_user_factura') }}">
+        Mis Facturas
+    </a>
+{% endblock %}
+
+
+{% block main_content %}
+
+    <div class="card card-primary container-fluid">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="dataTable" class="table table-striped" width="100%" cellspacing="0">
+                    <thead>
+                    <tr class="text-center">
+                        <th width="14%">Tipo</th>
+                        <th width="14%">Marca</th>
+                        <th width="14%">Modelo</th>
+                        <th width="14%">Precio_Venta</th>
+                        <th width="14%">Cantidad</th>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <th width="30%">Acciones</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in data %}
+                        <tr class="text-center">
+                            <td class="text-left pl-4">{{ item.serie }}</td>
+                            <td>{{ item.marca }}</td>
+                            <td>{{ item.modelo }}</td>
+                            <td>{{ item.precioV }}</td>
+                            <td>{{ item.cantidad_taller }}</td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td class="text-center">
+                                    <a class="btn btn-sm btn-default mr-1 ml-1 mb-1" title="Trasladar a Inventario"
+                                       href="{{ path('app_taller_add_inventario', {'id': item.id}) }}">
+                                        <i class="fas fa-arrow-right text-primary"></i>
+                                    </a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('dist/js/actions.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('plugins/users.js') }}"></script>
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('dist/js/alerts.js') }}"></script>
+    {% for msg in app.flashes('success') %}
+        <script>
+            showAlert('success', '{{ msg }}', 'Correcto');
+        </script>
+    {% endfor %}
+{% endblock %}

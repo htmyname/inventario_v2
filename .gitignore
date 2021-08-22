@@ -1,0 +1,14 @@
+###> symfony/framework-bundle ###
+/migrations
+/tests
+/var
+/.idea
+.env.test
+.php_cs.cache
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+phpunit.xml.dist
+/phpunit.xml
+/public/dist/img/system/
+/vendor/*

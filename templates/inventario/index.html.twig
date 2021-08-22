@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('plugins/datatables/datatables.min.css') }}">
+{% endblock %}
+
+
+{% block title %}
+    Inventario
+{% endblock %}
+
+{% block page_name %}
+    Inventario
+{% endblock %}
+
+{% block main_content %}
+    <div class="card card-primary container-fluid">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="dataTable" class="table table-striped" width="100%" cellspacing="0">
+                    <thead>
+                    <tr class="text-center">
+                        <th width="10%">Tipo</th>
+                        <th width="10%">Marca</th>
+                        <th width="10%">Modelo</th>
+                        <th width="10%">Precio_C</th>
+                        <th width="10%">Precio_V</th>
+                        <th width="10%">Ganancia</th>
+                        <th width="10%">%_Venta</th>
+                        <th width="10%">Cantidad</th>
+                        <th width="20%">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in data %}
+                        <tr class="text-center">
+                            <td class="text-left pl-4">{{ item.serie }}</td>
+                            <td>{{ item.marca }}</td>
+                            <td>{{ item.modelo }}</td>
+                            <td>{{ item.precioC }}</td>
+                            <td>{{ item.precioV }}</td>
+                            <td>{{ item.ganancia }}</td>
+                            <td>{{ item.xcientoganancia }}</td>
+                            <td>{{ item.cantidad_inventario }}</td>
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-default mr-1 ml-1 mb-1" title="Trasladar a Taller"
+                                   href="{{ path('app_inventario_add_taller', {'id': item.id}) }}">
+                                    <i class=" fas fa-arrow-right text-primary"></i>
+                                </a>
+                                <a class="btn btn-sm btn-default mr-1 ml-1 mb-1" title="Editar"
+                                   href="{{ path('app_items_edit', {'id': item.id}) }}">
+                                    <i class="far fa-edit text-warning"></i>
+                                </a>
+                                <a class="btn btn-sm btn-default mr-1 ml-1 mb-1" title="Dar Baja"
+                                   href="{{ path('app_inventario_darbaja', {'id': item.id}) }}">
+                                    <i class=" fas fas fa-eraser text-red"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('dist/js/actions.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('plugins/users.js') }}"></script>
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('dist/js/alerts.js') }}"></script>
+    {% for msg in app.flashes('success') %}
+        <script>
+            showAlert('success', '{{ msg }}', 'Correcto');
+        </script>
+    {% endfor %}
+{% endblock %}

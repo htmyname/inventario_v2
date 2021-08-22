@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Clientes
+{% endblock %}
+
+{% block page_name %}
+    Clientes
+{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('plugins/datatables/datatables.min.css') }}">
+{% endblock %}
+
+
+{% block main_content %}
+    <div class="card card-primary container-fluid">
+        {{ form_start(form, { attr: {class: 'submit-p-form'} }) }}
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_row(form.name, { attr: {'autocomplete': 'off'} } ) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.tell, { attr: {autocomplete: 'off', maxlength: '8', minlength: '8'} } ) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.add, {attr:{class: 'btn-primary btn-block submit-p-btn', style: 'margin-top: 32px!important'}}) }}
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+        <!-- /.card-body -->
+    </div>
+    <div class="card card-primary container-fluid">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="dataTable" class="table table-striped" width="100%" cellspacing="0">
+                    <thead>
+                    <tr class="text-center">
+                        <th width="25%">Nombre</th>
+                        <th width="25%">Teléfono</th>
+                        <th width="25%">Descuento</th>
+                        <th width="25%">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for client in data %}
+                        <tr class="text-center">
+                            <td class="text-left pl-4">{{ client.name }}</td>
+                            <td>{{ client.tell }}</td>
+                            <td>{{ client.descuento }}</td>
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-default mr-1 ml-1 mb-1" title="Llamar"
+                                   href="tel:{{ client.tell }}"> <i class=" fas fa-phone text-primary"></i> </a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a class="btn btn-sm btn-default mr-1 ml-1 mb-1" title="Editar"
+                                       href="{{ path('app_client_edit', {'id': client.id}) }}">
+                                        <i class="far fa-edit text-warning"></i> </a>
+                                    <button type="button" class="btn btn-sm btn-default mr-1 ml-1 mb-1" title="Eliminar"
+                                            onclick="delClient({{ client.id }}, '{{ client.name }}')">
+                                        <i class=" fas fa-trash-alt text-red"></i>
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('dist/js/actions.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('plugins/users.js') }}"></script>
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('dist/js/alerts.js') }}"></script>
+    {% for msg in app.flashes('success') %}
+        <script>
+          showAlert('success', '{{ msg }}', 'Correcto')
+        </script>
+    {% endfor %}
+    {% for msg in app.flashes('error') %}
+        <script>
+          showAlert('error', '{{ msg }}', 'Error')
+        </script>
+    {% endfor %}
+{% endblock %}

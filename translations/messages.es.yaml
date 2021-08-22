@@ -1,0 +1,27 @@
+# translations/messages.es.yaml
+Username: Usuario
+Name: Nombre
+Password: Contraseña
+Submit: Enviar
+Update: Actualizar
+Add: Añadir
+Marca: Marca
+Modelo: Modelo
+Serie: Tipo
+Precio c: Precio de Compra
+Precio v: Precio de Venta
+Tell: Teléfono
+Detalles: Detalles
+Precio: Precio
+Cantidad inventario: Cantidad a agregar
+Cantidad taller: Cantidad para taller
+Id cliente: Cliente
+Facturar: Facturar
+Pagename: Nombre de la Web
+Winproduct: Ganancias por productos
+Winservice: Ganancias por servicios
+Xcientoganancia: '% Venta'
+Id: ''
+Descuento: Descuento
+Image file: Imagen
+Nofactura: ''

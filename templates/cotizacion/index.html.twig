@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('plugins/datatables/datatables.min.css') }}">
+    <style>
+        #cotizacion_factura {
+            position: absolute;
+            right: 0;
+            margin-top: -33px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .form-check-label {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+
+{% block title %}
+    Cotizaciones
+{% endblock %}
+
+{% block page_name %}
+    Cotizaciones
+{% endblock %}
+
+{% block main_content %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="card card-primary container-fluid">
+            {{ form_start(form, { attr: {class: 'submit-p-form'} }) }}
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form_row(form.name, { attr: {'autocomplete': 'off'} } ) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.detalles, { attr: {'autocomplete': 'off'} } ) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.precio, { attr: {'autocomplete': 'off'} } ) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.ciclo, { attr: {'autocomplete': 'off'} } ) }}
+                    </div>
+                    <div class="col-md-4">
+                        <label>¿Factura?</label>
+                        <label for="cotizacion_factura" class="form-control" style="cursor: pointer"></label>
+                        {{ form_row(form.factura, { attr: {autocomplete: 'off'} } ) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.xcientoganancia, { attr: {'autocomplete': 'off'} } ) }}
+                    </div>
+                    <div class="col-md-4 m-auto">
+                        {{ form_row(form.submit, {attr:{class: 'btn-primary btn-block submit-p-btn', style: 'margin-top: 32px!important'}}) }}
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+            <!-- /.card-body -->
+        </div>
+    {% endif %}
+    <div class="card card-primary container-fluid">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="dataTable" class="table table-striped" width="100%" cellspacing="0">
+                    <thead>
+                    <tr class="text-center">
+                        <th width="14%">Nombre</th>
+                        <th width="14%">Detalles</th>
+                        <th width="14%">Precio</th>
+                        <th width="14%">Ciclo</th>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <th width="14%">Factura</th>
+                            <th width="14%">%_Venta</th>
+                            <th width="16%">Acciones</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for cotizacion in data %}
+                        <tr class="text-center">
+                            <td class="text-left pl-4">{{ cotizacion.name }}</td>
+                            <td>
+                                <input type="button" class="btn btn-sm btn-default" value="Ver detalles" onclick="alert('{{ cotizacion.detalles }}')">
+                            </td>
+                            <td>{{ cotizacion.precio }}</td>
+                            <td>{{ cotizacion.ciclo }}</td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td>
+                                    {% if cotizacion.factura %}
+                                        Si
+                                    {% else %}
+                                        No
+                                    {% endif %}
+                                </td>
+                                <td>{{ cotizacion.xcientoganancia }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-sm btn-default mr-1 ml-1 mb-1" title="Editar" href="{{ path('app_cotizacion_edit', {'id': cotizacion.id}) }}">
+                                        <i class="far fa-edit text-warning"></i> </a>
+                                    <button type="button" class="btn btn-sm btn-default mr-1 ml-1 mb-1" title="Eliminar"
+                                            onclick="delCotizacion({{ cotizacion.id }}, '{{ cotizacion.name }}')">
+                                        <i class=" fas fa-trash-alt text-red"></i>
+                                    </button>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('dist/js/actions.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('plugins/users.js') }}"></script>
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('dist/js/alerts.js') }}"></script>
+    {% for msg in app.flashes('success') %}
+        <script>
+          showAlert('success', '{{ msg }}', 'Correcto');
+        </script>
+    {% endfor %}
+{% endblock %}
