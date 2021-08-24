@@ -153,6 +153,7 @@ class UsersController extends AbstractController
 
 				$system = $this->getDoctrine()->getRepository(System::class)->find(1);
 				$system->setGanancia($system->getGanancia() - $tmpTotal);
+				$system->setEfectivo($system->getEfectivo() - $tmpTotal);
 				$em->persist($system);
 				if ($tmpTotal < 0) {
 					$detalles = $tmpTotal * -1;
@@ -207,7 +208,7 @@ class UsersController extends AbstractController
 				} else {
 					return $this->redirectToRoute('app_amortizar_users', [
 						'id' => $id
-					]);;
+					]);
 				}
 			} else {
 				return $this->redirectToRoute('app_amortizar_users', [
@@ -231,6 +232,7 @@ class UsersController extends AbstractController
 
 				$system = $this->getDoctrine()->getRepository(System::class)->find(1);
 				$system->setGanancia($system->getGanancia() + $cantidad_pagar);
+				$system->setEfectivo($system->getEfectivo() + $cantidad_pagar);
 
 				$logs = $this->logsOb->generateLogs(null, null, $user, 'deudapaga', $cantidad_pagar);
 				$em->persist($logs);

@@ -146,8 +146,8 @@ class TallerController extends AbstractController
 
                         //$total_real_venta_producto = $product_data->getPrecioC() - $product_data->getPrecioV() * $cliente->getDescuento() / 100;
                         //$ganancia_producto = ($total_real_venta_producto - $product_data->getPrecioC()) * $cantP;
-                        $saldo_r_producto_t = $ganancia_real_producto * $product_data->getXcientoganancia() / 100;
-                        $saldo_r_indirecto_t = $ganancia_real_producto * $system->getWinproduct() / 100 * ($usercant - 1);
+                        $saldo_r_producto_t = round($ganancia_real_producto * $product_data->getXcientoganancia() / 100, 2, 2);
+                        $saldo_r_indirecto_t = round($ganancia_real_producto * $system->getWinproduct() / 100 * ($usercant - 1), 2, 2);
                         $inversion_recuperada = $ganancia_real_producto - $saldo_r_producto_t - $saldo_r_indirecto_t;
 
                         $factura->setSaldoRetenidoP($factura->getSaldoRetenidoP() + $saldo_r_producto_t);
@@ -191,8 +191,8 @@ class TallerController extends AbstractController
                     $facturaTotalRealTeamporal += $total_real_venta_servicio;
 
                     //$total_real_venta_servicio = $service_data->getPrecio() - $service_data->getPrecio() * $cliente->getDescuento() / 100;
-                    $saldo_r_servicio_t = $total_real_venta_servicio * $service_data->getXcientoganancia() / 100;
-                    $saldo_r_indirecto_t = $total_real_venta_servicio * $system->getWinservice() / 100 * ($usercant - 1);
+                    $saldo_r_servicio_t = round($total_real_venta_servicio * $service_data->getXcientoganancia() / 100, 2, 2);
+                    $saldo_r_indirecto_t = round($total_real_venta_servicio * $system->getWinservice() / 100 * ($usercant - 1), 2, 2);
                     $inversion_recuperada = $total_real_venta_servicio - $saldo_r_servicio_t - $saldo_r_indirecto_t;
 
                     $factura->setSaldoRetenidoS($factura->getSaldoRetenidoS() + $saldo_r_servicio_t);

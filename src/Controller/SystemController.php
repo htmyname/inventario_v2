@@ -144,6 +144,7 @@ class SystemController extends AbstractController
             }
             if ($system->getBanco() + $cantidad_pagar >= 0) {
                 $system->setBanco($system->getBanco() + $cantidad_pagar);
+                $system->setRecuperado($system->getRecuperado() + $cantidad_pagar);
                 $em->persist($system);
                 $em->flush();
                 if ($cantidad_pagar < 0) {
@@ -256,6 +257,7 @@ class SystemController extends AbstractController
             $user = $this->getDoctrine()->getRepository(User::class)->find($userid);
             if ($user) {
                 $system->setGanancia($system->getGanancia() - $cantidad);
+                $system->setEfectivo($system->getEfectivo() - $cantidad);
                 $user->setPayTotal($user->getPayTotal() - $cantidad);
                 $logs = $this->logsOb->generateLogs(null, null, $user, 'prestamo', $cantidad);
                 $em->persist($logs);
@@ -308,6 +310,7 @@ class SystemController extends AbstractController
                     $system->setEfectivo($system->getEfectivo() - $gastos);
                 } else {
                     $system->setBanco($system->getBanco() - $gastos);
+                    $system->setRecuperado($system->getRecuperado() - $gastos);
                 }
                 $detalles = $gastos . ',' . $nota;
 
