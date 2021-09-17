@@ -16,7 +16,7 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>$ {{ caja }}</h3>
+                        <h3 class="mony">$ {{ caja }}</h3>
                         <p>Caja</p>
                     </div>
                     <div class="icon">
@@ -29,7 +29,7 @@
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>{{ total_productos }}/{{ total_servicios }}</h3>
+                        <h3 class="mony">{{ total_productos }}/{{ total_servicios }}</h3>
                         <p>Productos/Servicios</p>
                     </div>
                     <div class="icon">
@@ -42,7 +42,7 @@
                 <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3 class="text-white">$
+                        <h3 class="text-white mony">$
                             {% if salario[0]["payTotal"] >= 0 %}
                                 {{ salario[0]["totalPV"] + salario[0]["totalPS"] + salario[0]["payTotal"] }}
                             {% else %}
@@ -62,7 +62,7 @@
                 <!-- small box -->
                 <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3>$
+                        <h3 class="mony">$
                             {% if salario[0]["payTotal"] >= 0 %}
                                 0
                             {% else %}
@@ -152,7 +152,8 @@
                     <!-- /.card-body -->
                     {% if is_granted('ROLE_ADMIN') %}
                         <div class="card-footer clearfix">
-                            <a href="{{ path('app_home_todo') }}" class="btn btn-sm btn-info float-right"><i class="fas fa-plus"></i> Añadir</a>
+                            <a href="{{ path('app_home_todo') }}" class="btn btn-sm btn-info float-right"><i class="fas fa-plus"></i>
+                                Añadir</a>
                         </div>
                     {% endif %}
                 </div>
@@ -207,5 +208,12 @@
           showAlert('error', '{{ msg }}', 'Error')
         </script>
     {% endfor %}
+    <script>
+      let mony = document.querySelectorAll('.mony')
+      mony.forEach(e => {
+        let index = e.innerHTML.indexOf('.')
+        e.innerHTML = index >= 0 ? e.innerHTML.substring(0, index + 3) : e.innerHTML
+      })
+    </script>
 {% endblock %}
 
