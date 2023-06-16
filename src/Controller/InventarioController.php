@@ -40,7 +40,7 @@ class InventarioController extends AbstractController
 	/**
 	 * @Route("/add_taller/{id}", name="app_inventario_add_taller", requirements={"id"="\d+"})
 	 */
-	public function add_tallerAction($id = null, Request $request)
+	public function add_tallerAction(Request $request, $id = null)
 	{
 		$producto = new Producto();
 		if ($id !== null) {

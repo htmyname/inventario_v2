@@ -81,7 +81,7 @@ class UsersController extends AbstractController
 	/**
 	 * @Route("/edit/{id}", name="app_users_edit", requirements={"id"="\d+"})
 	 */
-	public function userEditAction($id = null, Request $request, UserPasswordEncoderInterface $passwordEncoder)
+	public function userEditAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, $id = null)
 	{
 		if ($id !== null) {
 			$em = $this->getDoctrine()->getManager();
@@ -110,7 +110,7 @@ class UsersController extends AbstractController
 	/**
 	 * @Route("/pay/{id}", name="app_pay_users", requirements={"id"="\d+"})
 	 */
-	public function payUsers($id = null, Request $request)
+	public function payUsers(Request $request, $id = null)
 	{
 		if ($id != null) {
 			$user = $this->getDoctrine()->getRepository(User::class)->find($id);
@@ -186,7 +186,7 @@ class UsersController extends AbstractController
 	/**
 	 * @Route("/amortizar/{id}", name="app_amortizar_users", requirements={"id"="\d+"})
 	 */
-	public function amortizar($id = null, Request $request)
+	public function amortizar(Request $request, $id = null)
 	{
 		if ($id != null) {
 			$user = $this->getDoctrine()->getRepository(User::class)->find($id);

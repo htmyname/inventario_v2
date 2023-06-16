@@ -280,7 +280,7 @@ class SystemController extends AbstractController
     /**
      * @Route("/gastos/{option}", name="app_system_gastos")
      */
-    public function gastos($option = 'wins', Request $request)
+    public function gastos(Request $request, $option = 'wins')
     {
         $system = $this->getDoctrine()->getRepository(System::class)->find(1);
         if ($system) {

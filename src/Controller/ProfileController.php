@@ -14,7 +14,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @Route("/profile", name="app_profile")
 	 */
-	public function index($id = null, Request $request, UserPasswordEncoderInterface $userPasswordEncoder): Response
+	public function index(Request $request, UserPasswordEncoderInterface $userPasswordEncoder, $id = null): Response
 	{
 		$user = $this->getUser();
 

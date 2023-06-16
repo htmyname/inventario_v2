@@ -53,7 +53,7 @@ class ServicesController extends AbstractController
 	/**
 	 * @Route("/edit/{id}", name="app_services_edit", requirements={"id"="\d+"})
 	 */
-	public function editAction($id = null, Request $request)
+	public function editAction(Request $request, $id = null)
 	{
 		if ($id !== null) {
 			$em = $this->getDoctrine()->getManager();

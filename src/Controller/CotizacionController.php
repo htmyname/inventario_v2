@@ -53,7 +53,7 @@ class CotizacionController extends AbstractController
     /**
      * @Route("/edit/{id}", name="app_cotizacion_edit", requirements={"id"="\d+"})
      */
-    public function edit($id = null, Request $request)
+    public function edit(Request $request,$id = null)
     {
         if ($id !== null) {
             $cotizacion = $this->getDoctrine()->getRepository(Cotizacion::class)->find($id);

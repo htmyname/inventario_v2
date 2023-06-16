@@ -96,7 +96,7 @@ class HomeController extends AbstractController
 	/**
 	 * @Route("/todo/{id}", name="app_home_todo_edit", requirements={"id"="\d+"})
 	 */
-	public function editTodo($id = null, Request $request)
+	public function editTodo(Request $request, $id = null)
 	{
 		if ($id != null) {
 			$todo = $this->getDoctrine()->getRepository(ToDo::class)->find($id);

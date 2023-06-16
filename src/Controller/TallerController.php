@@ -314,7 +314,7 @@ class TallerController extends AbstractController
     /**
      * @Route("/user_factura/{id}", name="app_factura_detalles", requirements={"id"="\d+"})
      */
-    public function detallesfacturaAction($id = null, Request $request)
+    public function detallesfacturaAction(Request $request, $id = null)
     {
 
         if ($id !== null) {
@@ -414,7 +414,7 @@ class TallerController extends AbstractController
     /**
      * @Route("/add_inventario/{id}", name="app_taller_add_inventario", requirements={"id"="\d+"})
      */
-    public function add_tallerAction($id = null, Request $request)
+    public function add_tallerAction(Request $request, $id = null)
     {
         $producto = new Producto();
         if ($id !== null) {

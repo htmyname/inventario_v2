@@ -74,7 +74,7 @@ class ItemsController extends AbstractController
 	/**
 	 * @Route("/edit/{id}", name="app_items_edit", requirements={"id"="\d+"})
 	 */
-	public function editAction($id = null, Request $request)
+	public function editAction(Request $request, $id = null)
 	{
 		if ($id !== null) {
 			$em = $this->getDoctrine()->getManager();
@@ -104,7 +104,7 @@ class ItemsController extends AbstractController
 	/**
 	 * @Route("/add/{id}", name="app_item_transf", requirements={"id"="\d+"})
 	 */
-	public function addAction($id = null, Request $request)
+	public function addAction(Request $request, $id = null)
 	{
 		$producto = new Producto();
 		//$sin_fondos = "";

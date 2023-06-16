@@ -12,3 +12,8 @@ phpunit.xml.dist
 /phpunit.xml
 /public/dist/img/system/
 /vendor/*
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
